@@ -66,6 +66,6 @@ while i < 200000:
     t0 = t0inter
     t1 = t1inter
 
-x = np.array([[1], [2], [3]])
-y = np.array([[7], [3], [1]])
+x = np.array([elem[0] for elem in array])
+y = np.array([elem[1] for elem in array])
 DisplayGraph(array, x, y)
