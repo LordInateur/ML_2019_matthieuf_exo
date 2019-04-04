@@ -47,16 +47,15 @@ t0 = 0
 t1 = 0
 
 time_stamp0 = date(2019, 3, 16).toordinal()
-y_0 = 81682
-time_objecitf = date(2019, 4, 5).toordinal() - time_stamp0
+time_objecitf = date(2019, 4, 5).toordinal()
 print("time_objecitf : ", time_objecitf)
 
 
 # ['2019-03-16', 81682], ['2019-03-18', 81720], ['2019-03-20', 817160],
 # Pas le temps de mettre toute les dates mais voici les 3 dernireres
 array = [
-        [date(2019, 3, 16).toordinal()- time_stamp0, 81682-y_0], [date(2019, 3, 18).toordinal()- time_stamp0, 81720-y_0], [date(2019, 3, 20).toordinal()- time_stamp0, 81760-y_0],
-        [date(2019, 3, 28).toordinal()- time_stamp0, 81900-y_0], [date(2019, 3, 30).toordinal()- time_stamp0, 81933-y_0], [date(2019, 4, 3).toordinal()- time_stamp0, 82003-y_0]]
+        [date(2019, 3, 16).toordinal(), 81682], [date(2019, 3, 18).toordinal(), 81720], [date(2019, 3, 20).toordinal(), 81760],
+        [date(2019, 3, 28).toordinal(), 81900], [date(2019, 3, 30).toordinal(), 81933], [date(2019, 4, 3).toordinal(), 82003]]
 
 i = 1
 lastCost = Decimal(1.0)
@@ -95,4 +94,5 @@ while i < max_i:
 print ( 'prevision : ', t0 + t1 * time_objecitf)
 """
 
+print ( 'prevision au 05-04-2019 : ', reg.predict(np.array([time_objecitf]).reshape(1, -1)))
 DisplayGraph(array, x, y)
