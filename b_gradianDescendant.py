@@ -42,30 +42,31 @@ def DisplayGraph(array, x, y):
     plt.show()
 
 
-t0 = 1
-t1 = 1
-array = [[1, 7], [2, 3], [3, 1]]
-i = 1
-lastCost = 1
+if __name__ == "__main__":
+    t0 = 1
+    t1 = 1
+    array = [[1, 7], [2, 3], [3, 1]]
+    i = 1
+    lastCost = 1
 
-while i < 200000:
-    print("Boucle %f" % i)
-    t0inter = t0 - (1 / i) / len(array) * AllSumHyp(array, t0, t1)
-    t1inter = t1 - (1 / i) / len(array) * AllSumHyp(array, t0, t1, True)
-    i += 1
+    while i < 200000:
+        print("Boucle %f" % i)
+        t0inter = t0 - (1 / i) / len(array) * AllSumHyp(array, t0, t1)
+        t1inter = t1 - (1 / i) / len(array) * AllSumHyp(array, t0, t1, True)
+        i += 1
 
-    cost = 1 / (2 * len(array)) * (AllSumHyp(array, t0, t1) ** 2)
-    print("TETA0 %f" % t0inter)
-    print("TETA1 %f" % t1inter)
-    print("Cost %f" % round(cost, 6))
+        cost = 1 / (2 * len(array)) * (AllSumHyp(array, t0, t1) ** 2)
+        print("TETA0 %f" % t0inter)
+        print("TETA1 %f" % t1inter)
+        print("Cost %f" % round(cost, 6))
 
-    if (cost < 0.08) & (round(cost, 6) == round(lastCost, 6)):
-        i = 200000
+        if (cost < 0.08) & (round(cost, 6) == round(lastCost, 6)):
+            i = 200000
 
-    lastCost = cost
-    t0 = t0inter
-    t1 = t1inter
+        lastCost = cost
+        t0 = t0inter
+        t1 = t1inter
 
-x = np.array([elem[0] for elem in array])
-y = np.array([elem[1] for elem in array])
-DisplayGraph(array, x, y)
+    x = np.array([elem[0] for elem in array])
+    y = np.array([elem[1] for elem in array])
+    DisplayGraph(array, x, y)

@@ -5,23 +5,27 @@ import pandas
 import csv
 import matplotlib.pyplot as plt
 
-print(" Hello word")
+"""
+    Petit script pour tester Panda
+"""
+if __name__ == "__main__":
+    print(" Hello word")
 
-csv_array = []
+    csv_array = []
 
-with open('data/matchinfo.csv', newline='') as csvfile:
-    spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
+    with open('data/matchinfo.csv', newline='') as csvfile:
+        spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
 
-    for row in spamreader:
-        csv_array.append(row)
-        # print(', '.join(row))
+        for row in spamreader:
+            csv_array.append(row)
+            # print(', '.join(row))
 
 
-colomn = csv_array.pop(0)
-print(colomn)
-print(csv_array)
-ar = numpy.array(csv_array)
-df = pandas.DataFrame(ar, columns = colomn)
+    colomn = csv_array.pop(0)
+    print(colomn)
+    print(csv_array)
+    ar = numpy.array(csv_array)
+    df = pandas.DataFrame(ar, columns = colomn)
 
 
 # ar = n²

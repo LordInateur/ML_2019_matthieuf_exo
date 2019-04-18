@@ -15,10 +15,10 @@ values = [0]*len(class0) + [1]*len(class1)
 #On rassemble les éléments d'entrée dans une seule liste
 entrees = class0 + class1
 """
-def o_a_classifier( points, classe, to_guess):
+def o_a_classifier( points, classe, to_guess, max_iter=1000):
 
     #Creation du classifier 0_vs_1
-    classifier = LogisticRegression(solver='lbfgs').fit(points, classe)
+    classifier = LogisticRegression(solver='lbfgs', max_iter=max_iter).fit(points, classe)
     """
     #Tableau pour faciliter les tests: on créé une paire contenant l'image et la valeur attendue
     test_values = [(x_test[index],value) for index, value in enumerate(y_test)]

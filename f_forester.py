@@ -5,7 +5,9 @@ from sklearn.ensemble import RandomForestClassifier
 
 
 
-
+"""
+    Un classifier utilisant la methode random_forest
+"""
 def random_forest_classifier( points, classe, to_guess):
 
     RandomForestClassifier(n_estimators=100, max_depth=2, random_state=0)
