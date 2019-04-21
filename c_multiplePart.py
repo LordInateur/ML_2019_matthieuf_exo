@@ -1,3 +1,5 @@
+import datetime
+
 import numpy as np
 from sklearn import datasets
 from sklearn.linear_model import LogisticRegression
@@ -16,9 +18,11 @@ values = [0]*len(class0) + [1]*len(class1)
 entrees = class0 + class1
 """
 def o_a_classifier( points, classe, to_guess, max_iter=1000):
+    start_time = datetime.datetime.now()
 
     #Creation du classifier 0_vs_1
     classifier = LogisticRegression(solver='lbfgs', max_iter=max_iter).fit(points, classe)
+    cl_construct_time = datetime.datetime.now() - start_time
     """
     #Tableau pour faciliter les tests: on créé une paire contenant l'image et la valeur attendue
     test_values = [(x_test[index],value) for index, value in enumerate(y_test)]
@@ -37,7 +41,7 @@ def o_a_classifier( points, classe, to_guess, max_iter=1000):
             print("Resultat : ", result, " ( attendu : ", elem[1] , ")")
 
     """
-    return classifier.predict(to_guess)
+    return classifier.predict(to_guess), cl_construct_time.microseconds, (datetime.datetime.now() - start_time - cl_construct_time).microseconds
 
 
 if __name__ == "__main__":

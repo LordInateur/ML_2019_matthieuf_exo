@@ -1,4 +1,5 @@
 # removable
+import datetime
 
 from sklearn.ensemble import RandomForestClassifier
 
@@ -9,13 +10,13 @@ from sklearn.ensemble import RandomForestClassifier
     Un classifier utilisant la methode random_forest
 """
 def random_forest_classifier( points, classe, to_guess):
-
-    RandomForestClassifier(n_estimators=100, max_depth=2, random_state=0)
-
+    start_time = datetime.datetime.now()
+    # RandomForestClassifier(n_estimators=100, max_depth=2, random_state=0)
     clf = RandomForestClassifier(n_estimators=100)
     clf = clf.fit(points, classe)
+    cl_construct_time = datetime.datetime.now() - start_time
     #  clf.predict([[.6, .6]])
-    return clf.predict(to_guess)
+    return clf.predict(to_guess), cl_construct_time.microseconds, (datetime.datetime.now() - start_time - cl_construct_time).microseconds
 
 
 
