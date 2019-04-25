@@ -6,6 +6,7 @@ from sklearn.model_selection import train_test_split
 from f_forester import random_forest_classifier
 from c_multiplePart import o_a_classifier
 from f_svm import svm_classifier
+from h_reuronal_network import neuronal_classifier
 
 """ Calcul la precision en %"""
 def cp (y_predict, y_test):
@@ -44,3 +45,11 @@ if __name__ == "__main__":
     # debut test svm (ova)
     predict, compute_time, guesting_time = svm_classifier(x_train, y_train, x_test, 'ova')
     print("Precision guested_svm(ova) : ", cp(predict, y_test), " (", compute_time, "+", guesting_time, "microseconds)")
+
+    # debut test svm (ova)
+    predict, compute_time, guesting_time = neuronal_classifier(x_train, y_train, x_test)
+    print("Precision guested_neuronal : ", cp(predict, y_test), " (", compute_time, "+", guesting_time, "microseconds)")
+
+    print(predict)
+    # print(y_test)
+
