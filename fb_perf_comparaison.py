@@ -40,10 +40,6 @@ if __name__ == "__main__":
     for p in range(len(classifier)):
         result = (0, 0, 0)
         for i in range(10):
-            # Séparation des données d'entrainement et de test
-            # (test_data[i][0], test_data[i][0], test_data[i][0])
-            # x_train, x_test, y_train, y_test = train_test_split(data, target, test_size=0.2)
-            # print(test_data[i])
             if(len(classifier[p][2])>0):
                 predict, compute_time, guesting_time = classifier[p][1](test_data[i][0], test_data[i][2], test_data[i][1], classifier[p][2])
             else :
@@ -54,31 +50,12 @@ if __name__ == "__main__":
 
         print(classifier[p][0], result[0]/10, " (", int(result[1]/10), "+", int(result[2]/10),"microseconds)")
 
-
-    # debut test random forest
     """
-    predict, compute_time, guesting_time = random_forest_classifier(x_train, y_train, x_test)
-    print("Precision guested_tree : ..........", cp(predict, y_test), " (", compute_time, "+", guesting_time, "microseconds)")
-
-    # debut test o_a
-    predict, compute_time, guesting_time = o_a_classifier(x_train, y_train, x_test)
-    print("Precision guested_o_a : ...........", cp(predict, y_test), " (", compute_time, "+", guesting_time, "microseconds)")
-
-    # debut test svm (ovo)
-    predict, compute_time, guesting_time = svm_classifier(x_train, y_train, x_test)
-    print("Precision guested_svm(ovo) : ......", cp(predict, y_test), " (", compute_time, "+", guesting_time, "microseconds)")
-
-    # debut test svm (ova)
-    predict, compute_time, guesting_time = svm_classifier(x_train, y_train, x_test, 'ova')
-    print("Precision guested_svm(ova) : ......", cp(predict, y_test), " (", compute_time, "+", guesting_time, "microseconds)")
-
-    # debut test neuronal (oneTraining)
-    predict, compute_time, guesting_time = neuronal_classifier_oneTraining(x_train, y_train, x_test)
-    print("Precision guested_neuronal(oneT) : ", cp(predict, y_test), " (", compute_time, "+", guesting_time, "microseconds)")
-
-    # debut test neuronal (step,by,step)
-    predict, compute_time, guesting_time = neuronal_classifier_stepByStep(x_train, y_train, x_test)
-    print("Precision guested_neuronal(sbs) :  ", cp(predict, y_test), " (", compute_time, "+", guesting_time, "microseconds)")
+                                                           ( fit    + predict )
+    Precision guested_tree :..........  97.52777777777779  ( 209017 +  10663 microseconds)
+    Precision guested_o_a : ........... 95.52777777777779  ( 322449 +    198 microseconds)
+    Precision guested_svm(ovo) : ...... 98.6388888888889   (  65675 +  19589 microseconds)
+    Precision guested_svm(ova) : ...... 98.6388888888889   (  65916 +  19196 microseconds)
+    Precision guested_neuronal(oneT) :  79.36111111111111  ( 105299 + 166953 microseconds)
+    Precision guested_neuronal(sbs) :   81.36111111111111  ( 548765 + 130554 microseconds)
     """
-
-
