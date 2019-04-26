@@ -24,18 +24,17 @@ def fn(value):
         return False
 
 
-
 """
-    Un classifier utilisant la methode random_forest
+    Un classifier utilisant la methode neuronal, full training
 """
-def neuronal_classifier( points, classe, to_guess):
+def neuronal_classifier_oneTraining(points, classe, to_guess):
     start_time = datetime.datetime.now()
 
     taille_vecteur = len(points[0])
     nb_vecteur = len(points)
     nb_classe = 10
-    liste_des_poids = [[500.]*taille_vecteur]*nb_classe
-    print(1, "-", liste_des_poids)
+    liste_des_poids = [[100.]*taille_vecteur for lm in range(nb_classe)]
+    # print(1, "-", liste_des_poids)
     for i in range(nb_vecteur):
         p = int(classe[i])
         # for p in range(nb_classe): # 10 : on suppose qu'il y a 10 classe qui sont des entiers
@@ -54,40 +53,99 @@ def neuronal_classifier( points, classe, to_guess):
         for j in range(taille_vecteur):
             # if p == classe[i]:
             # si le point doit être allumé
-            cur_list_des_poid = liste_des_poids[p]
-            print("cur ", "-", cur_list_des_poid)
+            # print("cur ", "-", cur_list_des_poid)
             if fn(points[i][j]):
                 # si le point est allumé
-                cur_list_des_poid[j] += sum * ((taille_vecteur-sum) / taille_vecteur) / taille_vecteur
+                # print("+(",sum, ") - ",  (taille_vecteur-sum) / taille_vecteur)
+                liste_des_poids[p][j] +=  (taille_vecteur-sum) / taille_vecteur
             else :
-                cur_list_des_poid[j] -= (taille_vecteur-sum) * (sum / taille_vecteur) / taille_vecteur
-        # print(x, "-", liste_des_poids[p])
-            liste_des_poids[p] = cur_list_des_poid
-        print(i, "-", liste_des_poids)
+                liste_des_poids[p][j] -=  sum / taille_vecteur
     cl_construct_time = datetime.datetime.now() - start_time
 
     # Maintenant on essai de prédir
     ret_list = []
     for i in range(len(to_guess)) :
+        max_sum = 0
+        ret_class = 0
         for p in range(nb_classe):
-            max_sum = 0
             cur_sum = 0
-            ret_class = 0
             for j in range(taille_vecteur):
                 cur_sum += int(fn(to_guess[i][j])) * liste_des_poids[p][j]
-            # print(p, "- ", cur_sum)
+            # print(p, "- ", cur_sum, "/", max_sum)
             if cur_sum > max_sum :
                 max_sum = cur_sum
                 ret_class = p
         ret_list.append(ret_class)
-    print(len(liste_des_poids))
-    print(len(liste_des_poids[0]))
-    print(liste_des_poids[0])
-    print(liste_des_poids[1])
-    print(liste_des_poids[2])
-    print(liste_des_poids)
+    # print(len(liste_des_poids))
+    # print(len(liste_des_poids[0]))
+    # print(liste_des_poids[0])
+    # print(liste_des_poids)
     return ret_list, cl_construct_time.microseconds, (datetime.datetime.now() - start_time - cl_construct_time).microseconds
 
+
+
+"""
+    Un classifier utilisant la methode neuronal, step by step
+"""
+def predict(poids, image):
+    """"""
+    max_sum = 0
+    ret_class = 0
+    for p in range(len(poids)):
+        cur_sum = 0
+        for j in range(len(image)):
+            cur_sum += int(fn(image[j])) * poids[p][j]
+        # print(p, "- ", cur_sum, "/", max_sum)
+        if cur_sum > max_sum:
+            max_sum = cur_sum
+            ret_class = p
+    return ret_class
+
+
+def neuronal_classifier_stepByStep(points, classe, to_guess):
+    start_time = datetime.datetime.now()
+
+    taille_vecteur = len(points[0])
+    nb_vecteur = len(points)
+    nb_classe = 10
+    liste_des_poids = [[100.]*taille_vecteur for lm in range(nb_classe)]
+    # print(1, "-", liste_des_poids)
+    for i in range(nb_vecteur):
+        p = int(classe[i])
+        # for p in range(nb_classe): # 10 : on suppose qu'il y a 10 classe qui sont des entiers
+        # pour tout les points on va chercher a mettre ajour notre predicteur
+        if(predict(liste_des_poids, points[i]) != p):
+            sum = 0 # le nombre de point dans le juste
+            for j in range(taille_vecteur):
+                point_allume = fn(points[i][j])
+                # if p == classe[i] :
+                # si le point doit être allumé
+                if point_allume :
+                    # si le point est allumé
+                    sum += 1
+
+            # Maintenant on met a jour la liste des poids
+            for j in range(taille_vecteur):
+                # if p == classe[i]:
+                # si le point doit être allumé
+                # print("cur ", "-", cur_list_des_poid)
+                if fn(points[i][j]):
+                    # si le point est allumé
+                    # print("+(",sum, ") - ",  (taille_vecteur-sum) / taille_vecteur)
+                    liste_des_poids[p][j] +=  (taille_vecteur-sum) / taille_vecteur
+                else :
+                    liste_des_poids[p][j] -=  sum / taille_vecteur
+    cl_construct_time = datetime.datetime.now() - start_time
+
+    # Maintenant on essai de prédir
+    ret_list = []
+    for i in range(len(to_guess)) :
+        ret_list.append(predict(liste_des_poids, to_guess[i]))
+    # print(len(liste_des_poids))
+    # print(len(liste_des_poids[0]))
+    # print(liste_des_poids[0])
+    # print(liste_des_poids)
+    return ret_list, cl_construct_time.microseconds, (datetime.datetime.now() - start_time - cl_construct_time).microseconds
 
 
 

@@ -21,7 +21,7 @@ def o_a_classifier( points, classe, to_guess, max_iter=1000):
     start_time = datetime.datetime.now()
 
     #Creation du classifier 0_vs_1
-    classifier = LogisticRegression(solver='lbfgs', max_iter=max_iter).fit(points, classe)
+    classifier = LogisticRegression(solver='lbfgs', max_iter=max_iter,multi_class="ovr").fit(points, classe)
     cl_construct_time = datetime.datetime.now() - start_time
     """
     #Tableau pour faciliter les tests: on créé une paire contenant l'image et la valeur attendue
