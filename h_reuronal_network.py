@@ -14,12 +14,21 @@ import numpy as np
 
 
 # couleurs
+
 black = (0, 0, 0)
 red = (255, 0, 0)
 green = (0, 255, 0)
 blue = (0, 0, 255)
 white = (255, 255, 255)
 
+
+""" Calcul la precision en %"""
+def cp (y_predict, y_test):
+    guested = 0
+    for p in range(len(y_test)):
+        if y_test[p] == y_predict[p]:
+            guested += 1
+    return guested * 100 / len(y_test)
 
 def fn(value):
     if value > 3 :
@@ -101,6 +110,7 @@ def predict(poids, image):
 
 
 def nc_sbs_poids_updateur(image, classe, liste_des_poids):
+
     taille_vecteur = len(image)
 
     # for p in range(nb_classe): # 10 : on suppose qu'il y a 10 classe qui sont des entiers
@@ -143,7 +153,7 @@ def nc_sbs_poids_updateur(image, classe, liste_des_poids):
 
     return liste_des_poids
 
-def neuronal_classifier_stepByStep(points, classe, to_guess):
+def neuronal_classifier_stepByStep(points, classe, to_guess, nb_passage=2):
     start_time = datetime.datetime.now()
 
     taille_vecteur = len(points[0])
@@ -151,8 +161,9 @@ def neuronal_classifier_stepByStep(points, classe, to_guess):
     nb_classe = 10
     liste_des_poids = [[100.]*taille_vecteur for lm in range(nb_classe)]
     # print(1, "-", liste_des_poids)
-    for i in range(nb_vecteur):
-        liste_des_poids = nc_sbs_poids_updateur(points[i], classe[i], liste_des_poids)
+    for p in range(nb_passage):
+        for i in range(nb_vecteur):
+            liste_des_poids = nc_sbs_poids_updateur(points[i], classe[i], liste_des_poids)
 
     cl_construct_time = datetime.datetime.now() - start_time
 
@@ -161,6 +172,40 @@ def neuronal_classifier_stepByStep(points, classe, to_guess):
     for i in range(len(to_guess)) :
         ret_list.append(predict(liste_des_poids, to_guess[i]))
     return ret_list, cl_construct_time.microseconds, (datetime.datetime.now() - start_time - cl_construct_time).microseconds
+
+
+def neuronal_classifier_stepByStep_tomax(points, classe, to_guess):
+    start_time = datetime.datetime.now()
+
+    taille_vecteur = len(points[0])
+    nb_vecteur = len(points)
+    nb_classe = 10
+    liste_des_poids = [[100.]*taille_vecteur for lm in range(nb_classe)]
+    last_perf, new_perf = 0, 0.00001
+    nb_ite = 0
+    # print(1, "-", liste_des_poids)
+    while new_perf > last_perf :
+        nb_ite += 1
+        last_perf = new_perf
+        for i in range(nb_vecteur):
+            liste_des_poids = nc_sbs_poids_updateur(points[i], classe[i], liste_des_poids)
+
+        # Maintenant on essai de prédir
+        ret_list_learning = []
+        for i in range(len(points)) :
+            ret_list_learning.append(predict(liste_des_poids, points[i]))
+        new_perf = cp(ret_list_learning, classe)
+
+        cl_construct_time = datetime.datetime.now() - start_time
+        if new_perf > last_perf:
+            # Maintenant on essai de prédir
+            ret_list = []
+            for i in range(len(to_guess)):
+                ret_list.append(predict(liste_des_poids, to_guess[i]))
+    # print("nb_ite : " + str(nb_ite) + " - " + str(last_perf) + " - " + str(new_perf))
+
+    return ret_list, cl_construct_time.microseconds, (datetime.datetime.now() - start_time - cl_construct_time).microseconds
+
 
 
 def to255(value, list):

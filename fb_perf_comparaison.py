@@ -6,7 +6,8 @@ from sklearn.model_selection import train_test_split
 from f_forester import random_forest_classifier
 from c_multiplePart import o_a_classifier
 from f_svm import svm_classifier
-from h_reuronal_network import neuronal_classifier_oneTraining, neuronal_classifier_stepByStep
+from h_reuronal_network import neuronal_classifier_oneTraining, neuronal_classifier_stepByStep, \
+    neuronal_classifier_stepByStep_tomax
 
 """ Calcul la precision en %"""
 def cp (y_predict, y_test):
@@ -24,14 +25,17 @@ if __name__ == "__main__":
     data = digits['data']
     # On selectionnes les valeurs de sortie(Y)
     target = digits['target']
-
+    """"""
     classifier = [
-        ("Precision guested_tree :.......... ", random_forest_classifier, ""),
-        ("Precision guested_o_a : ...........", o_a_classifier, ""),
-        ("Precision guested_svm(ovo) : ......", svm_classifier, ""),
-        ("Precision guested_svm(ova) : ......", svm_classifier, "ova"),
-        ("Precision guested_neuronal(oneT) : ", neuronal_classifier_oneTraining, ""),
-        ("Precision guested_neuronal(sbs) :  ", neuronal_classifier_stepByStep, "")
+        ("Precision guested_tree :......................... ", random_forest_classifier, ""),
+        ("Precision guested_o_a : ..........................", o_a_classifier, ""),
+        ("Precision guested_svm(ovo) : .....................", svm_classifier, ""),
+        ("Precision guested_svm(ova) : .....................", svm_classifier, "ova"),
+        ("Precision guested_neuronal(oneT) : ...............", neuronal_classifier_oneTraining, ""),
+        ("Precision guested_neuronal(sbs)(1) ............:  ", neuronal_classifier_stepByStep, 1),
+        ("Precision guested_neuronal(sbs)(2) ............:  ", neuronal_classifier_stepByStep, 2),
+        ("Precision guested_neuronal(sbs)(3) ............:  ", neuronal_classifier_stepByStep, 3),
+        ("Precision neuronal_classifier_stepByStep_tomax :  ", neuronal_classifier_stepByStep_tomax,"")
     ]
     test_data = []
     for i in range(10):
@@ -40,8 +44,11 @@ if __name__ == "__main__":
     for p in range(len(classifier)):
         result = (0, 0, 0)
         for i in range(10):
-            if(len(classifier[p][2])>0):
-                predict, compute_time, guesting_time = classifier[p][1](test_data[i][0], test_data[i][2], test_data[i][1], classifier[p][2])
+            if(len(str(classifier[p][2]))>0):
+                if str(classifier[p][2]) == "y_train" :
+                    predict, compute_time, guesting_time = classifier[p][1](test_data[i][0], test_data[i][2], test_data[i][1], test_data[i][3])
+                else :
+                    predict, compute_time, guesting_time = classifier[p][1](test_data[i][0], test_data[i][2], test_data[i][1], classifier[p][2])
             else :
                 predict, compute_time, guesting_time = classifier[p][1](test_data[i][0], test_data[i][2], test_data[i][1])
             result = (result[0] + cp(predict, test_data[i][3]),
